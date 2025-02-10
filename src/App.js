@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 
@@ -133,11 +133,14 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/Custom-Roles">
       <div className="flex min-h-screen bg-white">
         <Sidebar />
         <MainContent roles={roles} onRolesChange={handleRolesChange} />
       </div>
+      <Routes>
+        <Route path="/" element={<Navigate to="/people" replace />} />
+      </Routes>
     </Router>
   );
 }
