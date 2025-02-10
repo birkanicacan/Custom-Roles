@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Custom-Roles/static/css/main.54e59a91.css",
-    "main.js": "/Custom-Roles/static/js/main.d79a64e8.js",
-    "index.html": "/Custom-Roles/index.html",
-    "main.54e59a91.css.map": "/Custom-Roles/static/css/main.54e59a91.css.map",
-    "main.d79a64e8.js.map": "/Custom-Roles/static/js/main.d79a64e8.js.map"
+    "main.css": "./static/css/main.54e59a91.css",
+    "main.js": "./static/js/main.51e737dd.js",
+    "index.html": "./index.html",
+    "main.54e59a91.css.map": "./static/css/main.54e59a91.css.map",
+    "main.51e737dd.js.map": "./static/js/main.51e737dd.js.map"
   },
   "entrypoints": [
     "static/css/main.54e59a91.css",
-    "static/js/main.d79a64e8.js"
+    "static/js/main.51e737dd.js"
   ]
 }
