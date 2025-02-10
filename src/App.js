@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 
@@ -133,7 +133,7 @@ function App() {
   };
 
   return (
-    <Router basename="/Custom-roles">
+    <Router>
       <div className="flex min-h-screen bg-white">
         <Sidebar />
         <MainContent roles={roles} onRolesChange={handleRolesChange} />
