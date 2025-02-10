@@ -133,7 +133,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/Custom-roles">
       <div className="flex min-h-screen bg-white">
         <Sidebar />
         <MainContent roles={roles} onRolesChange={handleRolesChange} />
