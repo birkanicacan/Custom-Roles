@@ -2,10 +2,47 @@ import React, { useState } from 'react';
 import { XMarkIcon, ClipboardIcon, Cog6ToothIcon, BuildingOfficeIcon, UserGroupIcon, ClipboardDocumentListIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
-function UserDetailDialog({ user, onClose, roles }) {
+function UserDetailDialog({ user, onClose, roles, onRolesChange }) {
+  const [isOpen, setIsOpen] = useState(true);
+  const [currentRole, setCurrentRole] = useState(user.role);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const joinedDate = 'Feb 6, 2025';
   const [activeTab, setActiveTab] = useState('general');
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+
+  const handleRoleSelect = (selectedRole) => {
+    // Remove user from previous role's assignedMembers if they had one
+    const updatedRoles = roles.map(role => {
+      if (role.name === currentRole) {
+        return {
+          ...role,
+          assignedMembers: role.assignedMembers?.filter(member => member.id !== user.id) || []
+        };
+      }
+      if (role.name === selectedRole.name) {
+        // Add user to new role's assignedMembers
+        const newMember = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          workspaces: user.workspaces,
+          lastModified: new Date().toLocaleDateString('en-US', { 
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          })
+        };
+        return {
+          ...role,
+          assignedMembers: [...(role.assignedMembers || []), newMember]
+        };
+      }
+      return role;
+    });
+
+    setCurrentRole(selectedRole.name);
+    onRolesChange(updatedRoles);
+    setIsDropdownOpen(false);
+  };
 
   // Get system roles from the roles prop
   const systemRoles = roles
@@ -141,25 +178,26 @@ function UserDetailDialog({ user, onClose, roles }) {
               <div className="relative">
                 <button 
                   className="px-3 py-1.5 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 flex items-center"
-                  onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  {user.role || 'Select role'}
+                  {currentRole || 'Select role'}
                   <ChevronDownIcon className="w-4 h-4 ml-2" />
                 </button>
-                {showRoleDropdown && (
+                {isDropdownOpen && (
                   <div className="absolute right-0 mt-1 w-64 bg-white rounded-md shadow-lg border border-gray-200 z-10">
                     <div className="py-1">
                       {/* System Roles */}
                       {roles.filter(role => role.isSystemRole).map((role) => (
                         <button 
                           key={role.name}
+                          onClick={() => handleRoleSelect(role)}
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between group"
                         >
                           <div>
                             <span>{role.name}</span>
                             <span className="ml-2 text-xs text-gray-400">System</span>
                           </div>
-                          {user.role === role.name && <span className="text-gray-400">✓</span>}
+                          {currentRole === role.name && <span className="text-gray-400">✓</span>}
                         </button>
                       ))}
 
@@ -172,19 +210,23 @@ function UserDetailDialog({ user, onClose, roles }) {
                       {roles.filter(role => !role.isSystemRole).map((role) => (
                         <button 
                           key={role.name}
+                          onClick={() => handleRoleSelect(role)}
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center justify-between group"
                         >
                           <div>
                             <span>{role.name}</span>
                             <span className="ml-2 text-xs text-gray-400">Custom</span>
                           </div>
-                          {user.role === role.name && <span className="text-gray-400">✓</span>}
+                          {currentRole === role.name && <span className="text-gray-400">✓</span>}
                         </button>
                       ))}
 
                       {/* Divider before Remove option */}
                       <div className="border-t border-gray-200 my-1" />
-                      <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                      <button 
+                        onClick={() => handleRoleSelect({ name: null })}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                      >
                         Remove from workspace
                       </button>
                     </div>
@@ -265,7 +307,7 @@ function UserDetailDialog({ user, onClose, roles }) {
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">{user.name}</h2>
-                <div className="text-sm text-[#2381fe]">{user.role}</div>
+                <div className="text-sm text-[#2381fe]">{currentRole}</div>
               </div>
             </div>
             <div className="flex items-center space-x-4">

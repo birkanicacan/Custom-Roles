@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import UserDetailDialog from './UserDetailDialog';
 
-function MembersPage({ roles }) {
+function MembersPage({ roles, onRolesChange }) {
   const [selectedMembers, setSelectedMembers] = useState(new Set());
   const [selectedUser, setSelectedUser] = useState(null);
   const [members] = useState([
@@ -303,6 +303,7 @@ function MembersPage({ roles }) {
         <UserDetailDialog
           user={selectedUser}
           roles={roles}
+          onRolesChange={onRolesChange}
           onClose={() => setSelectedUser(null)}
         />
       )}

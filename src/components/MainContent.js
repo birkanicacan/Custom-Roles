@@ -178,7 +178,7 @@ function MainContent({ roles, onRolesChange }) {
   return (
     <Routes>
       <Route path="/people" element={<SettingsPage settings={settings} toggles={toggles} roles={roles} />} />
-      <Route path="/members" element={<MembersPage roles={roles} />} />
+      <Route path="/members" element={<MembersPage roles={roles} onRolesChange={onRolesChange} />} />
       <Route path="/user-roles" element={
         <UserRolesPage 
           roles={roles} 
